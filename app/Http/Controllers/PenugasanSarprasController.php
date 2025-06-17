@@ -128,7 +128,9 @@ class PenugasanSarprasController extends Controller
             return response()->json(['html' => $html]);
         }
 
-        return view('sarpras.penugasan.index', compact('breadcrumb', 'page', 'activeMenu', 'penugasan', 'periode'));
+        $periode_sekarang = Periode::getPeriodeAktif()->kode_periode;
+
+        return view('sarpras.penugasan.index', compact('breadcrumb', 'page', 'activeMenu', 'penugasan', 'periode', 'periode_sekarang'));
     }
 
     // Detail Fasilitas & Laporan Pengaduan nya

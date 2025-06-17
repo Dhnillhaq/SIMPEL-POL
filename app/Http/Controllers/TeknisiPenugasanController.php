@@ -26,7 +26,7 @@ class TeknisiPenugasanController extends Controller
 
         $tanggalSekarang = Carbon::now()->day;
 
-        if($tanggalSekarang > 15) {
+        if($tanggalSekarang < 15) {
             $breadcrumb = (object) [
                 'title' => '',
                 'list' => []
@@ -87,6 +87,8 @@ class TeknisiPenugasanController extends Controller
 
         $penugasan->appends(request()->query());
 
+        $periode_sekarang = Periode::getPeriodeAktif()->kode_periode;
+
         // Jika permintaan adalah AJAX, kembalikan hanya tabel
         if ($request->ajax()) {
             $html = view('teknisi.penugasan.penugasan_table', compact('penugasan'))->render();
@@ -100,6 +102,7 @@ class TeknisiPenugasanController extends Controller
             'activeMenu' => $activeMenu,
             'penugasan' => $penugasan,
             'periode' => $periode,
+            'periode_sekarang' => $periode_sekarang,
         ]);
     }
 

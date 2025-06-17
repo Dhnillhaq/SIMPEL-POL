@@ -26,7 +26,7 @@ class PengaduanSarprasController extends Controller
 
         $tanggalSekarang = Carbon::now()->day;
 
-        if($tanggalSekarang > 15) {
+        if($tanggalSekarang < 15) {
             $breadcrumb = (object) [
                 'title' => '',
                 'list' => []
@@ -35,7 +35,7 @@ class PengaduanSarprasController extends Controller
             $pesan = 'Maaf, Anda tidak dapat mengakses menu ini setelah tanggal 15. Silakan tunggu hingga periode berikutnya pada tanggal <span class="font-semibold">1–15</span>.';
 
             return view ('access.denied', [
-                'activeMenu' => $activeMenu, 
+                'activeMenu' => $activeMenu,
                 'breadcrumb' => $breadcrumb,
                 'pesan' => $pesan,
             ]);
@@ -46,9 +46,8 @@ class PengaduanSarprasController extends Controller
             'list' => ['Home', 'Laporan Pengaduan']
         ];
 
-        $page = (object) [
-            'title' => 'Daftar Pengaduan dari Semua Periode Sebelumnya untuk Penugasan Inspeksi'
-        ];
+        $title = 'Daftar Pengaduan dari Semua Periode Sebelumnya untuk Menugaskan Inspeksi';
+
 
         $pelapor = '';
 
@@ -93,9 +92,9 @@ class PengaduanSarprasController extends Controller
                   ->where('id_periode', '!=', $periodeSekarang->id_periode)
                   ->select(DB::raw('SUM(CASE
                         WHEN users.id_role = 1 THEN 1
-                        WHEN users.id_role = 5 THEN 2 
-                        WHEN users.id_role = 6 THEN 3 
-                        ELSE 0 
+                        WHEN users.id_role = 5 THEN 3
+                        WHEN users.id_role = 6 THEN 2
+                        ELSE 0
                     END)'))
                   ->join('users', 'aduan.id_user_pelapor', '=', 'users.id_user');
 
@@ -119,7 +118,10 @@ class PengaduanSarprasController extends Controller
             return response()->json(['html' => $html]);
         }
 
-        return view('sarpras.pengaduan.index', compact('breadcrumb', 'page', 'activeMenu', 'pengaduan', 'pelapor'));
+        $periode_sekarang = Periode::getPeriodeAktif();
+        $periode_sebelumnya = Periode::where('tanggal_mulai', '<', $periode_sekarang->tanggal_mulai)->orderBy('tanggal_mulai', 'desc')->first()->kode_periode;
+
+        return view('sarpras.pengaduan.index', compact('breadcrumb', 'title', 'activeMenu', 'pengaduan', 'pelapor', 'periode_sebelumnya'));
     }
 
     // Detail Fasilitas & Laporan Pengaduan nya

@@ -91,10 +91,10 @@ class Inspeksi extends Model
         $count_mahasiswa = $counts[1] ?? 0; // id_role = 1
         $count_dosen = $counts[5] ?? 0;     // id_role = 5
         $count_tendik = $counts[6] ?? 0;    // id_role = 6
-        
 
 
-        $result = ($count_mahasiswa * 1) + ($count_dosen * 2) + ($count_tendik * 3);
+
+        $result = ($count_mahasiswa * 1) + ($count_dosen * 3) + ($count_tendik * 2 );
 
         // $tes_nilai = [
         //     'mahasiswa' => $count_mahasiswa,
@@ -102,7 +102,7 @@ class Inspeksi extends Model
         //     'dosen' => $count_dosen,
         //     'result' => $result
         // ];
-    
+
         // dd($tes_nilai);
 
         return $result;

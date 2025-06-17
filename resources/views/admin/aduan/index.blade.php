@@ -53,8 +53,8 @@
             </div>
         </div>
 
-        <div id="aduan-table-body">
-            @include('admin.aduan.aduan_table', ['aduan' => $aduan])
+        <div id="perbaikan-table-body">
+            @include('admin.aduan.aduan_table', ['perbaikan' => $perbaikan])
         </div>
     </div>
 
@@ -64,6 +64,7 @@
 
 @push('js')
     <script>
+
         function reloadData() {
             $.ajax({
                 url: "{{ route('admin.aduan') }}",
@@ -76,10 +77,10 @@
                     sort_direction: $('#sort-direction').val(),
                 },
                 success: function (response) {
-                    $('#aduan-table-body').html(response.html);
+                    $('#perbaikan-table-body').html(response.html);
                 },
                 error: function () {
-                    Swal.fire('Error', 'Gagal memuat data aduan', 'error');
+                    Swal.fire('Error', 'Gagal memuat data perbaikan', 'error');
                 }
             });
         }

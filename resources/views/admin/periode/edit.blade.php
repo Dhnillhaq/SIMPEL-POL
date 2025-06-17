@@ -41,7 +41,7 @@ $(document).ready(function() {
     $("#form-edit-periode").validate({
         rules: {
             kode_periode: "required",
-            tannggal_mulai: {
+            tanggal_mulai: {
                 required: true,
                 date: true
             },
@@ -74,7 +74,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        reloadData(); 
+                        reloadData();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {

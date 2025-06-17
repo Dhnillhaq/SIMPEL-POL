@@ -34,13 +34,13 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-between">
+            {{-- <div class="flex items-center justify-between">
                 <label class="inline-flex items-center">
                     <input type="checkbox" class="form-checkbox" />
                     <span class="ml-2 text-sm text-gray-700">Keep me sign in</span>
                 </label>
                 <a href="#" class="text-sm text-gray-500 hover:underline">Forgot Password?</a>
-            </div>
+            </div> --}}
 
             <button type="submit"
                 class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2 rounded-md cursor-pointer">
@@ -50,9 +50,9 @@
             <div id="loginAlert" class="text-sm text-center text-red-600 mt-2 hidden"></div>
         </form>
 
-        <p class="mt-4 text-center text-sm">
+        {{-- <p class="mt-4 text-center text-sm">
             <a href="{{ route('register') }}" class="text-blue-600 hover:underline">Belum punya akun?</a>
-        </p>
+        </p> --}}
     </div>
 </div>
 @endsection

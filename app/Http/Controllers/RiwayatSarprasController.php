@@ -31,8 +31,10 @@ class RiwayatSarprasController extends Controller
 
         // Filter berdasarkan pencarian
         if ($request->search) {
-            $query->whereHas('fasilitas', function ($q) use ($request) {
-                $q->where('nama_fasilitas', 'like', "%{$request->search}%");
+            $query->whereHas('inspeksi', function ($q) use ($request) {
+                $q->whereHas('fasilitas', function ($subQ) use ($request) {
+                    $subQ->where('nama_fasilitas', 'like', "%{$request->search}%");
+                });
             });
         }
 
@@ -94,7 +96,7 @@ class RiwayatSarprasController extends Controller
         // $aduan = $perbaikan->aduan_tertangani;
 
         return view('sarpras.riwayat.detail')->with([
-            'aduan' => $perbaikan->aduan_tertangani,  
+            'aduan' => $perbaikan->aduan_tertangani,
             'perbaikan' => $perbaikan
         ]);
     }

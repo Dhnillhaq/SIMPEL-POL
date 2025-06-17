@@ -8,7 +8,7 @@
                 <p class="text-sm text-gray-500">TOTAL LAPORAN</p>
                 <h2 class="text-2xl font-bold text-gray-800">{{ $totalLaporan }}</h2>
                 <p class="text-xs text-gray-400 mt-1">
-                    {{ $totalLaporan > 0 ? $totalLaporan . ' laporan baru minggu ini' : 'Tidak ada laporan baru minggu ini' }}
+                    {{ $totalLaporan > 0 ? $totalLaporan . ' total laporan baru' : 'Tidak ada laporan baru minggu ini' }}
                 </p>
             </div>
 
@@ -17,7 +17,7 @@
                 <p class="text-sm text-gray-500">TERTUNDA</p>
                 <h2 class="text-2xl font-bold text-gray-800">{{ $tertunda }}</h2>
                 <p class="text-xs text-gray-400 mt-1">
-                    {{ $tertunda > 0 ? $tertunda . ' menunggu lebih dari 48 jam' : 'Tidak ada laporan tertunda' }}</p>
+                    {{ $tertunda > 0 ? $tertunda . ' laporan sedang menunggu untuk ditindak lanjuti' : 'Tidak ada laporan tertunda' }}</p>
             </div>
 
             {{-- Dalam Proses --}}
@@ -25,7 +25,7 @@
                 <p class="text-sm text-gray-500">DALAM PROSES</p>
                 <h2 class="text-2xl font-bold text-gray-800">{{ $dalamProses }}</h2>
                 <p class="text-xs text-gray-400 mt-1">
-                    {{ $dalamProses > 0 ? $dalamProses . ' diperbaiki hari ini' : 'Tidak ada laporan dalam proses' }}</p>
+                    {{ $dalamProses > 0 ? $dalamProses . ' aduan sedang diperbaiki' : 'Tidak ada laporan dalam proses' }}</p>
             </div>
 
             {{-- Selesai --}}
@@ -33,7 +33,7 @@
                 <p class="text-sm text-gray-500">SELESAI</p>
                 <h2 class="text-2xl font-bold text-gray-800">{{ $selesai }}</h2>
                 <p class="text-xs text-gray-400 mt-1">
-                    {{ $selesai > 0 ? $selesai . ' diselesaikan dalam 24 jam terakhir' : 'Tidak ada laporan selesai' }}</p>
+                    {{ $selesai > 0 ? $selesai . ' sudah diselesaikan' : 'Tidak ada laporan selesai' }}</p>
             </div>
         </div>
 
@@ -399,7 +399,7 @@
                                         display: false
                                     }
                                 }
-                            }, 
+                            },
                         });
 
                         tabButtons.forEach(button => {

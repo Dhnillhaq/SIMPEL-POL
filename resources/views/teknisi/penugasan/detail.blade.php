@@ -41,7 +41,7 @@
                 <div>
                     <p class="text-gray-500">Status Aduan</p>
                     <span class="inline-block mt-2 px-8 py-1 text-xs font-semibold text-white bg-blue-600 rounded-lg">
-                        {{ $statusAduan }}
+                        SEDANG_INSPEKSI
                     </span>
                 </div>
             </div>

@@ -28,7 +28,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $breadcrumb = (object) [
-            'title' => 'Dashboard Sarana Prasarana',
+            'title' => 'Dashboard Admin',
             'list' => ['Home', 'dashboard']
         ];
 

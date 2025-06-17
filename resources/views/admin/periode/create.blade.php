@@ -44,7 +44,7 @@
         $("#form-tambah-periode").validate({
             rules: {
                 kode_periode: "required",
-                tannggal_mulai: {
+                tanggal_mulai: {
                     required: true,
                     date: true
                 },
