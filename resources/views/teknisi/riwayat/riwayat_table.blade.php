@@ -1,47 +1,60 @@
 <x-table>
     <x-slot name="head">
         <x-table.heading>No</x-table.heading>
+        <x-table.heading>Periode</x-table.heading>
+        <x-table.heading>Kode Fasilitas</x-table.heading>
         <x-table.heading>Nama Fasilitas</x-table.heading>
         <x-table.heading>Lokasi</x-table.heading>
-        <x-table.heading>Kategori</x-table.heading>
-        <x-table.heading>Tanggal Mulai</x-table.heading>
-        <x-table.heading>Tanggal Selesai</x-table.heading>
+        <x-table.heading>Tanggal Perbaikan</x-table.heading>
+        <x-table.heading>Umpan Balik</x-table.heading>
         <x-table.heading>Aksi</x-table.heading>
     </x-slot>
 
     <x-slot name="body">
-        @forelse ($aduan as $index => $a)
+        @forelse ($perbaikan as $index => $p)
             <x-table.row>
-                <x-table.cell>{{ $aduan->firstItem() + $index }}</x-table.cell>
-                <x-table.cell>{{ $a->fasilitas->nama_fasilitas ?? '-' }}</x-table.cell>
-                @php
-                    $ruangan = $a->fasilitas->ruangan;
-                    $lantai = $ruangan->lantai;
-                    $gedung = $lantai->gedung;
-                @endphp
+                <x-table.cell>{{ $perbaikan->firstItem() + $index }}</x-table.cell>
+                <x-table.cell>{{ $p->periode->kode_periode}}</x-table.cell>
+                <x-table.cell>{{ $p->inspeksi->fasilitas->kode_fasilitas}}</x-table.cell>
+                <x-table.cell>{{ $p->inspeksi->fasilitas->nama_fasilitas }}</x-table.cell>
                 <x-table.cell>
-                    {{ $gedung->nama_gedung ?? '-' }}
-                    {{ $lantai ? ', ' . $lantai->nama_lantai : '' }}
-                    {{ $ruangan ? ', ' . $ruangan->kode_ruangan : '' }}
+                    {{ $p->inspeksi->fasilitas->lokasi ?? '-' }}
                 </x-table.cell>
-                <x-table.cell>{{ ucwords($a->fasilitas->kategori->nama_kategori) ?? '-' }}</x-table.cell>
-                <x-table.cell>{{ $a->tanggal_aduan ?? '-'}}</x-table.cell>
-                <x-table.cell>{{ $a->fasilitas->inspeksi->first()->perbaikan->tanggal_selesai ?? '-' }}</x-table.cell>
+                <x-table.cell>{{ $p->tanggal_selesai ?? '-' }}</x-table.cell>
                 <x-table.cell>
-                    <button onclick="modalAction('{{ route('teknisi.riwayat.show_ajax', $a->fasilitas->id_fasilitas) }}')"
-                        class="text-blue-600 hover:underline text-sm cursor-pointer">
-                        <img src="{{ asset('icons/solid/Detail.svg') }}" alt="Detail" class="h-7 w-7 inline">
-                    </button>
+                    @if($p->rata_rata_rating)
+                        <div class="flex items-center mb-2 gap-1">
+                            <i class="fas fa-star text-yellow-400 text-lg"></i>
+                            <span class="text-yellow-500 font-bold text-lg">{{ number_format($p->rata_rata_rating, 1) }}</span>
+                            <span class="text-gray-600 text-sm"> / 5.0</span>
+                        </div>
+                    @else
+                        <span class="text-gray-500">-</span>
+                    @endif
+                </x-table.cell>
+                <x-table.cell>
+                    <div class="flex gap-1">
+                        <button onclick="modalAction('{{ route('teknisi.riwayat.show_ajax', $p->id_perbaikan) }}')"
+                            class="cursor-pointer text-blue-600 hover:underline text-sm">
+                            <img src="{{ asset('icons/solid/Detail.svg') }}" alt="Detail"
+                                class="h-7 w-7 min-h-[27px] min-w-[27px]">
+                        </button>
+                        <button onclick="modalAction('{{ route('teknisi.riwayat.comment_ajax', $p->id_perbaikan) }}')"
+                            class="cursor-pointer text-blue-600 hover:underline text-sm">
+                            <img src="{{ asset('icons/solid/message.svg') }}" alt="Comment"
+                                class="h-7 w-7 min-h-[20px] min-w-[20px]">
+                        </button>
+                    </div>
                 </x-table.cell>
             </x-table.row>
         @empty
             <tr class="border-1">
-                <td colspan="5" class="text-center text-gray-500 py-4">Tidak ada data Aduan dengan status Selesai.</td>
+                <td colspan="9" class="text-center text-gray-500 py-4">Tidak ada data Aduan.</td>
             </tr>
         @endforelse
     </x-slot>
 </x-table>
 
 <div class="mt-4">
-    {{ $aduan->links() }}
+    {{ $perbaikan->links() }}
 </div>
