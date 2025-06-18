@@ -113,7 +113,7 @@ class RiwayatSarprasController extends Controller
 
         // $aduan = $perbaikan->aduan_tertangani;
 
-        return view('sarpras.riwayat.comment')->with ([
+        return view('sarpras.riwayat.comment')->with([
             'aduan' => $perbaikan->aduan_tertangani,
             'perbaikan' => $perbaikan,
         ]);
@@ -121,8 +121,8 @@ class RiwayatSarprasController extends Controller
 
     private function set_sheet()
     {
-        $aduan = Aduan::query()->where('status', 'selesai')
-            ->with(['fasilitas', 'fasilitas.inspeksi.perbaikan'])
+        $perbaikan = Perbaikan::with(['periode', 'inspeksi', 'inspeksi.fasilitas'])
+            ->whereNotNull('tanggal_selesai')
             ->get();
 
         $filename = 'riwayat_perbaikan_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
@@ -130,16 +130,16 @@ class RiwayatSarprasController extends Controller
         $sheet->title = 'Riwayat Perbaikan';
         $sheet->text = 'Berikut adalah daftar perbaikan fasilitas.';
         $sheet->footer = 'Dibuat oleh Sistem';
-        $sheet->header = ['Periode', 'Nama Fasilitas', 'Lokasi', 'Kategori', 'Tanggal Aduan', 'Tanggal Perbaikan'];
+        $sheet->header = ['Periode', 'Nama Fasilitas', 'Lokasi', 'Kategori', 'Tanggal Mulai Perbaikan', 'Tanggal Selesai Perbaikan'];
 
-        $sheet->data = $aduan->map(function ($item) {
+        $sheet->data = $perbaikan->map(function ($item) {
             return [
                 'periode' => $item->periode->kode_periode,
-                'nama_fasilitas' => $item->fasilitas->nama_fasilitas,
-                'lokasi' => $item->fasilitas->ruangan->lantai->gedung->nama_gedung . ' - ' . $item->fasilitas->ruangan->lantai->nama_lantai . ' - ' . $item->fasilitas->ruangan->nama_ruangan,
-                'kategori' => $item->fasilitas->kategori->nama_kategori,
-                'tanggal_aduan' => $item->tanggal_aduan,
-                'tanggal_perbaikan' => $item->fasilitas->inspeksi->first()->perbaikan ? $item->fasilitas->inspeksi->first()->perbaikan->tanggal_selesai : 'Belum diperbaiki',
+                'nama_fasilitas' => $item->inspeksi->fasilitas->nama_fasilitas,
+                'lokasi' => $item->inspeksi->fasilitas->lokasi,
+                'kategori' => $item->inspeksi->fasilitas->kategori->nama_kategori,
+                'tanggal_mulai_perbaikan' => $item->tanggal_mulai,
+                'tanggal_selesai_perbaikan' => $item->tanggal_selesai,
             ];
         })->toArray();
         $sheet->filename = $filename;

@@ -135,7 +135,7 @@ class RiwayatTeknisiController extends Controller
         $sheet->title = 'Riwayat Perbaikan';
         $sheet->text = 'Berikut adalah daftar perbaikan fasilitas.';
         $sheet->footer = 'Dibuat oleh Sistem';
-        $sheet->header = ['Periode', 'Nama Fasilitas', 'Lokasi', 'Kategori', 'Tanggal Perbaikan'];
+        $sheet->header = ['Periode', 'Nama Fasilitas', 'Lokasi', 'Kategori', 'Tanggal Mulai Perbaikan', 'Tanggal Selesai Perbaikan'];
 
         $sheet->data = $perbaikan->map(function ($item) {
             return [
@@ -143,7 +143,8 @@ class RiwayatTeknisiController extends Controller
                 'nama_fasilitas' => $item->inspeksi->fasilitas->nama_fasilitas,
                 'lokasi' => $item->inspeksi->fasilitas->lokasi,
                 'kategori' => $item->inspeksi->fasilitas->kategori->nama_kategori,
-                'tanggal_perbaikan' => $item->tanggal_selesai,
+                'tanggal_mulai_perbaikan' => $item->tanggal_mulai,
+                'tanggal_selesai_perbaikan' => $item->tanggal_selesai,
             ];
         })->toArray();
         $sheet->filename = $filename;
