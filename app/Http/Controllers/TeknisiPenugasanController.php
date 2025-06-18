@@ -77,9 +77,7 @@ class TeknisiPenugasanController extends Controller
         }
 
         // Sorting
-        $sortColumn = $request->sort_column ?? 'created_at';
-        $sortDirection = $request->sort_direction ?? 'asc';
-        $query->orderBy($sortColumn, $sortDirection);
+        $query->orderBy('tanggal_mulai', 'desc');
 
         // Pagination
         $perPage = $request->input('per_page', 10);

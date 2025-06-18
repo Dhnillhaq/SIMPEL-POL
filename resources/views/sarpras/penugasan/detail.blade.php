@@ -185,7 +185,7 @@
 
         <!-- Biaya -->
         <div class="mt-8 mb-10">
-            <div class="mb-4"><h3 class="text-xl font-bold text-gray-800">Rincian Anggaran Perbaikan</h3></div>
+            <div class="mb-4"><h3 class="text-xl font-bold text-gray-800">Perencanaan Biaya Perbaikan</h3></div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-left border border-gray-300">
                     <thead class="text-base text-gray-700 bg-white">
@@ -210,7 +210,7 @@
                         </tr>
                         @empty
                         <tr class="font-medium">
-                            <td colspan="3" class="text-center text-gray-500 py-4 bg-gray-100">Tidak ada data biaya.</td>
+                            <td colspan="3" class="text-center text-gray-500 py-4 bg-gray-100">Tidak ada data perencanaan biaya.</td>
                         </tr>
                         @endforelse
                     </tbody>

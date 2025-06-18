@@ -177,7 +177,7 @@
 
             <!-- Rincian Anggaran -->
             <div class="mt-6">
-                <h4 class="font-semibold text-gray-800 mb-3">Rincian Anggaran Perbaikan</h4>
+                <h4 class="font-semibold text-gray-800 mb-3">Perencanaan Biaya Perbaikan</h4>
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm border-collapse">
@@ -202,8 +202,7 @@
                             @else
                                 <tr>
                                     <td colspan="3" class="border border-gray-300 text-center text-gray-400">Tidak ada
-                                        rincian
-                                        anggaran.</td>
+                                        perencanaan biaya.</td>
                                 </tr>
                             @endif
                         </tbody>
