@@ -67,10 +67,9 @@
         </div>
     </div>
 
-    {{-- 3. Rincian Anggaran Perbaikan --}}
     <div>
         <h2 class="font-semibold flex items-center space-x-2 mb-4">
-            <span>Rincian Anggaran Perbaikan</span>
+            <span>Perencanaan Biaya Perbaikan</span>
         </h2>
 
         <div class="overflow-x-auto">
@@ -91,7 +90,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="border p-2 text-center">Tidak ada rincian anggaran.</td>
+                            <td colspan="3" class="border p-2 text-center">Tidak ada perencanaan biaya.</td>
                         </tr>
                     @endforelse
                 </tbody>
