@@ -16,40 +16,40 @@ class KriteriaSeeder extends Seeder
     {
         $data = [
             [
-                'kode_kriteria' => 'USC',
-                'nama_kriteria' => 'User Count',
+                'kode_kriteria' => 'JLP',
+                'nama_kriteria' => 'Jumlah Pelapor',
                 'jenis_kriteria' => JenisKriteria::BENEFIT,
-                'bobot' => 0.15
+                'bobot' => 15
             ],
             [
                 'kode_kriteria' => 'UGS',
                 'nama_kriteria' => 'Urgensi',
                 'jenis_kriteria' => JenisKriteria::BENEFIT,
-                'bobot' => 0.23
+                'bobot' => 23
             ],
             [
-                'kode_kriteria' => 'BYA',
-                'nama_kriteria' => 'Biaya Anggaran',
+                'kode_kriteria' => 'PRB',
+                'nama_kriteria' => 'Perkiraan Biaya',
                 'jenis_kriteria' => JenisKriteria::COST,
-                'bobot' => 0.31
+                'bobot' => 31
             ],
             [
                 'kode_kriteria' => 'TKR',
                 'nama_kriteria' => 'Tingkat Kerusakan',
                 'jenis_kriteria' => JenisKriteria::BENEFIT,
-                'bobot' => 0.12,
+                'bobot' => 12
             ],
             [
                 'kode_kriteria' => 'LPB',
                 'nama_kriteria' => 'Laporan Berulang',
                 'jenis_kriteria' => JenisKriteria::BENEFIT,
-                'bobot' => 0.07
+                'bobot' => 7
             ],
             [
                 'kode_kriteria' => 'BTP',
                 'nama_kriteria' => 'Bobot Pelapor',
                 'jenis_kriteria' => JenisKriteria::BENEFIT,
-                'bobot' => 0.12
+                'bobot' => 12
             ],
         ];
 

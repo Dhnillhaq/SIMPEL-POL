@@ -42,21 +42,21 @@ class KriteriaController extends Controller
 
         $rules = [];
         foreach ($kriteria as $k) {
-            $rules["bobot_{$k->id_kriteria}"] = 'required|numeric|min:0|max:1';
+            $rules["bobot_{$k->id_kriteria}"] = 'required|integer|min:0|max:100';
         }
 
         $validated = $request->validate($rules);
 
         $total = collect($validated)->sum();
 
-        if (round($total, 3) != 1.000) {
-            return back()->withErrors(['total' => 'Jumlah total bobot harus sama dengan 1.'])->withInput();
+        if ($total != 100) {
+            return back()->withErrors(['total' => 'Jumlah total bobot harus sama dengan 100%.'])->withInput();
         }
 
         foreach ($validated as $key => $value) {
             $id = str_replace('bobot_', '', $key);
             Kriteria::where('id_kriteria', $id)->update([
-                'bobot' => $value
+                'bobot' => $value // Store as integer (0-100)
             ]);
         }
 
