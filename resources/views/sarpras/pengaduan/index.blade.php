@@ -4,8 +4,9 @@
     <div class="bg-white rounded-lg shadow p-6 border-t-4 border-blue-600">
         <div class="flex items-center justify-between mb-4">
             <div class="flex flex-col font-semibold py-1">
-            <span class="text-md text-gray-700 font-semibold">{{ $title }}</span>
-            <span class="text-md text-gray-700 font-semibold">Periode Aduan yang diproses : {{ $periode_sebelumnya }}</span>
+                <span class="text-md text-gray-700 font-semibold">{{ $title }}</span>
+                <span class="text-md text-gray-700 font-semibold">Periode Aduan yang diproses :
+                    {{ $periode_sebelumnya }}</span>
             </div>
             {{-- <div class="flex gap-2">
                 <a href="{{route('sarpras.pengaduan.export_excel')}}"
