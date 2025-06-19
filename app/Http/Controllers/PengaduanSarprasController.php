@@ -124,6 +124,10 @@ class PengaduanSarprasController extends Controller
         return view('sarpras.pengaduan.index', compact('breadcrumb', 'title', 'activeMenu', 'pengaduan', 'pelapor', 'periode_sebelumnya'));
     }
 
+    public function info_bobot(){
+        return view('sarpras.pengaduan.info');
+    }
+
     // Detail Fasilitas & Laporan Pengaduan nya
     public function show_pengaduan($id)
     {
