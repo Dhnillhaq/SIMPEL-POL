@@ -4,7 +4,7 @@
     <div class="bg-white rounded-lg shadow p-6 border-t-4 border-blue-600">
         <div class="flex items-center justify-between mb-4">
             <span class="text-sm text-gray-700">Daftar penugasan perbaikan fasilitas yang terdaftar dalam sistem</span>
-            <div class="flex gap-2">
+            {{-- <div class="flex gap-2">
                 <a href="{{ route('teknisi.perbaikan.export_excel') }}"
                     class="bg-blue-800 text-white px-4 py-2 rounded flex items-center gap-2 text-sm hover:bg-blue-900">
                     <i class="fas fa-file-excel"></i> Ekspor Excel
@@ -13,7 +13,7 @@
                     class="bg-blue-800 text-white px-4 py-2 rounded flex items-center gap-2 text-sm hover:bg-blue-900">
                     <i class="fas fa-file-pdf"></i> Ekspor PDF
                 </a>
-            </div>
+            </div> --}}
         </div>
         <hr class="border-black opacity-30 mt-4">
 
@@ -119,5 +119,7 @@
                 reloadData();
             });
         });
+
+
     </script>
 @endpush

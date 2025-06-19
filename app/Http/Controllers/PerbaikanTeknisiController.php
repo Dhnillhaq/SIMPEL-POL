@@ -104,6 +104,78 @@ class PerbaikanTeknisiController extends Controller
             throw $th;
         }
     }
+    public function confirm($id)
+    {
+       try {
+            $perbaikan = Perbaikan::with(['inspeksi', 'inspeksi.fasilitas', 'inspeksi.fasilitas.aduan', 'inspeksi.periode'])->findOrFail($id);
+            $inspeksi = $perbaikan->inspeksi;
+            $fasilitas = $inspeksi->fasilitas;
+            // dd($inspeksi);
+            $statusAduan = $inspeksi->status_aduan->value ?? '-';
+
+            // Kembalikan view confirm dengan data yang relevan
+            return view('teknisi.perbaikan.confirm', compact('perbaikan', 'inspeksi', 'fasilitas', 'statusAduan'));
+        } catch (\Throwable $th) {
+            // Log error jika terjadi masalah
+            Log::error('Gagal menampilkan halaman konfirmasi: ' . $th->getMessage());
+            return redirect()->back()->withErrors(['general' => 'Gagal menampilkan halaman konfirmasi.']);
+        }
+    }
+    public function submit(Request $request)
+{
+    dd($request->all());
+    try {
+        // Validasi input
+        $request->validate([
+            'work_notes' => 'nullable|string',
+            'work_images' => 'nullable|array',
+            'work_images.*' => 'image|max:2048', // Validasi gambar
+            'work_status' => 'required|in:SEDANG_DIPERBAIKI,SELESAI',
+        ]);
+
+        // Temukan perbaikan berdasarkan ID
+        $perbaikan = Perbaikan::with(['inspeksi', 'inspeksi.fasilitas'])->findOrFail($request->id_perbaikan);
+
+        // Simpan work_notes ke detail_perbaikan
+        $perbaikan->detail_perbaikan = $request->work_notes;
+
+        // Upload gambar dan simpan URL ke gambar_perbaikan
+        $uploadedImages = [];
+        if ($request->hasFile('work_images')) {
+            foreach ($request->file('work_images') as $image) {
+                $path = $image->store(
+                    'perbaikan/fasilitas/' . $perbaikan->inspeksi->periode->id_periode,
+                    'public'
+                );
+                $uploadedImages[] = $path;
+            }
+        }
+        $perbaikan->gambar_perbaikan = implode(',', $uploadedImages); // Simpan URL gambar sebagai string yang dipisahkan koma
+
+        // Update status aduan jika work_status adalah SELESAI
+        if ($request->work_status === 'SELESAI') {
+            $aduan = $perbaikan->inspeksi->fasilitas->aduan()
+                ->where('id_inspeksi', $perbaikan->inspeksi->id_inspeksi)
+                ->first();
+
+            if ($aduan) {
+                $aduan->status = Status::SELESAI->value;
+                $aduan->save();
+            }
+
+            // Tetapkan tanggal_selesai menjadi now()
+            $perbaikan->tanggal_selesai = now();
+        }
+
+        // Simpan perubahan pada perbaikan
+        $perbaikan->save();
+
+        return redirect()->back()->with('success', 'Data perbaikan berhasil diperbarui.');
+    } catch (\Throwable $th) {
+        Log::error('Gagal memperbarui data perbaikan: ' . $th->getMessage());
+        return redirect()->back()->withErrors(['general' => 'Gagal memperbarui data perbaikan.']);
+    }
+}
     public function cycle($id)
     {
         try {

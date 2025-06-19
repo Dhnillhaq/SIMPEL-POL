@@ -9,14 +9,14 @@
             <span class="text-md text-gray-700">Periode Sekarang : {{$periode_sekarang}}
             </span>
         </div>
-        <div class="flex gap-2">
-            <a href="{{ route('teknisi.perbaikan.export_excel') }}" class="bg-blue-800 text-white px-4 py-2 rounded flex items-center gap-2 text-sm hover:bg-blue-900">
+        {{-- <div class="flex gap-2">
+            <a href="{{ route('teknisi.penugasan.export_excel') }}" class="bg-blue-800 text-white px-4 py-2 rounded flex items-center gap-2 text-sm hover:bg-blue-900">
                 <i class="fas fa-file-excel"></i> Ekspor Excel
             </a>
-            <a href="{{ route('teknisi.perbaikan.export_pdf') }}" class="bg-blue-800 text-white px-4 py-2 rounded flex items-center gap-2 text-sm hover:bg-blue-900">
+            <a href="{{ route('teknisi.penugasan.export_pdf') }}" class="bg-blue-800 text-white px-4 py-2 rounded flex items-center gap-2 text-sm hover:bg-blue-900">
                 <i class="fas fa-file-pdf"></i> Ekspor PDF
             </a>
-        </div>
+        </div> --}}
     </div>
     <hr class="border-black opacity-30 mt-4">
 

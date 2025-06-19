@@ -48,9 +48,6 @@
 
 @push('js')
 <script>
-
-    
-
     function reloadData() {
     $.ajax({
         url: "{{ route('admin.jurusan') }}",

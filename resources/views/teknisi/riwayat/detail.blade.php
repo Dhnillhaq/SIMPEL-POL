@@ -228,7 +228,7 @@
                 <div class="bg-blue-500 text-white p-2 rounded-md mr-3">
                     <i class="fas fa-comment-dots"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-800">Umpan Balik Pelanggan</h3>
+                <h3 class="text-lg font-semibold text-gray-800">Umpan Balik Pelapor</h3>
             </div>
             <div class="w-16 h-0.5 bg-orange-400 mb-4"></div>
             <div class="space-y-4">
