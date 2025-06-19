@@ -54,9 +54,9 @@ class PenugasanSarprasController extends Controller
         // Ambil data kriteria
         $kriteria = Kriteria::all()->keyBy('nama_kriteria')->toArray();
         $kriteriaList = [
-            'user_count' => $kriteria['User Count'],
+            'user_count' => $kriteria['Jumlah Pelapor'],
             'urgensi_fasilitas' => $kriteria['Urgensi'],
-            'biaya' => $kriteria['Biaya Anggaran'],
+            'biaya' => $kriteria['Perkiraan Biaya'],
             'tingkat_kerusakan' => $kriteria['Tingkat Kerusakan'],
             'laporan_berulang' => $kriteria['Laporan Berulang'],
             'bobot_pelapor' => $kriteria['Bobot Pelapor'],

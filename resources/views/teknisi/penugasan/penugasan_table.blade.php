@@ -6,6 +6,8 @@
         <x-table.heading>Lokasi</x-table.heading>
         <x-table.heading>Urgensi</x-table.heading>
         <x-table.heading>Tingkat Kerusakan</x-table.heading>
+        <x-table.heading>Tanggal Mulai</x-table.heading>
+        <x-table.heading>Tanggal Selesai</x-table.heading>
         <x-table.heading>Aksi</x-table.heading>
     </x-slot>
 
@@ -38,6 +40,8 @@
                         {{ $item->tingkat_kerusakan ?? '-' }}
                     </span>
                 </x-table.cell>
+                <x-table.cell>{{ $item->tanggal_mulai ?? '-' }}</x-table.cell> 
+                <x-table.cell>{{ $item->tanggal_selesai ?? '-' }}</x-table.cell>                                     
                 <x-table.cell>
                     <div class="flex min-w-[90px] items-center gap-2">
                         <button onclick="modalAction('{{ route('teknisi.penugasan.show_ajax', $item->id_inspeksi) }}')"

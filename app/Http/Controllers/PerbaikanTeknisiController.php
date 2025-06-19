@@ -73,7 +73,7 @@ class PerbaikanTeknisiController extends Controller
                     $q->where('status', Status::SEDANG_DIPERBAIKI->value);
                 });
             });
-        });
+        })->orderBy('tanggal_mulai', 'desc');
 
 
         $perPage = $request->input('per_page', 10);
@@ -81,6 +81,7 @@ class PerbaikanTeknisiController extends Controller
 
         $periode = Periode::all();
         $status = Status::cases();
+
 
         if ($request->ajax()) {
             $html = view('teknisi.perbaikan.perbaikan_table', compact('perbaikan'))->render();

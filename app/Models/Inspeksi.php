@@ -14,7 +14,7 @@ class Inspeksi extends Model
     protected $table = 'inspeksi';
     protected $primaryKey = 'id_inspeksi';
     protected $guarded =[];
-
+    
     protected $casts =[
         'tingkat_kerusakan' => TingkatKerusakan::class,
     ];

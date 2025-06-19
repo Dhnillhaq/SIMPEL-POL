@@ -15,12 +15,15 @@
         @foreach ($kriteria as $k)
         <div>
             <label class="block text-sm font-medium mb-1">{{ $k->nama_kriteria }}<span class="text-red-500"> *</span></label>
-            <input type="number" name="{{ 'bobot_' . $k->id_kriteria }}" id="{{ 'bobot_' . $k->id_kriteria }}" class="w-full border rounded-md px-3 py-2 text-sm" value={{ $k->bobot }} placeholder="Bobot Kriteria" required min="0" max="1" step="0.005">
+            <input type="number" name="{{ 'bobot_' . $k->id_kriteria }}" id="{{ 'bobot_' . $k->id_kriteria }}" class="w-full border rounded-md px-3 py-2 text-sm bobot-input" value="{{ $k->bobot }}" placeholder="Bobot Kriteria (%)" required min="0" max="100" step="1">
             <span id="{{ 'bobot_' . $k->id_kriteria }}-error" class="text-xs text-red-500 mt-1 error-text"></span>
         </div>
         @endforeach
 
-        <div class="text-right mt-4">
+        <div class="flex justify-between items-center mt-4 mb-2">
+            <div class="text-base font-medium">
+                Total Bobot: <span id="total-bobot" class="font-bold">0%</span>
+            </div>
             <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md cursor-pointer">
                 <div class="flex justify-center items-center gap-[10px]">
                     <img src="{{ asset('icons/light/Check-circle.svg') }}" alt="Simpan" class="w-6 h-6">
@@ -36,23 +39,45 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
 <script>
 $(document).ready(function() {
+    // Fungsi untuk menghitung dan menampilkan total bobot
+    function updateTotalBobot() {
+        let total = 0;
+        $('.bobot-input').each(function() {
+            let val = parseInt($(this).val());
+            total += isNaN(val) ? 0 : val;
+        });
+        $('#total-bobot').text(total + '%');
+        // Ubah warna teks berdasarkan total
+        if (total === 100) {
+            $('#total-bobot').removeClass('text-red-500').addClass('text-green-500');
+        } else {
+            $('#total-bobot').removeClass('text-green-500').addClass('text-red-500');
+        }
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    updateTotalBobot();
+
+    // Perbarui total saat input berubah
+    $('.bobot-input').on('input', updateTotalBobot);
+
     // Tambahkan metode custom untuk validasi total bobot
-    $.validator.addMethod("totalBobotSatu", function(value, element) {
+    $.validator.addMethod("totalBobotSeratus", function(value, element) {
         let total = 0;
         for (let i = 1; i <= 6; i++) {
-            let val = parseFloat($(`#bobot_${i}`).val());
+            let val = parseInt($(`#bobot_${i}`).val());
             total += isNaN(val) ? 0 : val;
         }
-        return total.toFixed(3) == 1.000; // Gunakan pembulatan untuk menghindari error desimal
-    }, "Jumlah total bobot harus sama dengan 1");
+        return total === 100;
+    }, "Jumlah total bobot harus sama dengan 100%");
 
     let rules = {};
     $.each([1, 2, 3, 4, 5, 6], function(i, num) {
         rules['bobot_' + num] = {
             required: true,
-            number: true,
+            digits: true,
             min: 0,
-            max: 1
+            max: 100
         };
     });
 
@@ -60,13 +85,13 @@ $(document).ready(function() {
     $.each([1, 2, 3, 4, 5, 6], function(i, num) {
         messages['bobot_' + num] = {
             required: "Bobot " + num + " harus diisi",
-            number: "Bobot harus berupa angka desimal",
+            digits: "Bobot harus berupa angka bulat",
             min: "Minimal bernilai 0",
-            max: "Maksimal bernilai 1",
+            max: "Maksimal bernilai 100",
         };
     });
 
-    rules['bobot_6'].totalBobotSatu = true;
+    rules['bobot_6'].totalBobotSeratus = true;
 
     $("#form-edit-bobot").validate({
         errorElement: 'span',

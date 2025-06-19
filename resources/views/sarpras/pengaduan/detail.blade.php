@@ -115,11 +115,18 @@
         <!-- Scrollable Container -->
         <div class="max-h-104 overflow-y-auto pr-2">
             @foreach($fasilitas->aduan as $aduan)
-                <div class="mb-6 pb-4">
-                    <p class="text-base font-semibold text-gray-900">{{ $aduan->pelapor->nama ?? 'Nama Tidak Diketahui' }}
-                    </p>
-                    <p class="text-sm text-gray-600 my-2">{{ ucwords(strtolower($aduan->pelapor->role->nama_role)) ?? '-' }}
-                    </p>
+                @php
+                    $role = strtolower($aduan->pelapor->role->nama_role ?? 'mahasiswa'); // Default ke mahasiswa jika role tidak ditemukan
+                    $backgroundColor = match ($role) {
+                        'dosen' => 'bg-red-100', // Merah dengan opacity 10%
+                        'tendik' => 'bg-yellow-100', // Kuning dengan opacity 10%
+                        'mahasiswa' => 'bg-blue-100', // Biru dengan opacity 10%
+                        default => 'bg-gray-100', // Default warna abu-abu
+                    };
+                @endphp
+                <div class="mb-6 pb-4 rounded-md p-4 {{ $backgroundColor }}">
+                    <p class="text-base font-semibold text-gray-900">{{ $aduan->pelapor->nama ?? 'Nama Tidak Diketahui' }}</p>
+                    <p class="text-sm text-gray-600 my-2">{{ ucwords(strtolower($aduan->pelapor->role->nama_role)) ?? '-' }}</p>
                     <p class="text-gray-900 text-sm mb-2">{{ $aduan->deskripsi }}</p>
 
                     @if(!empty($aduan->bukti_foto) && file_exists(public_path($aduan->bukti_foto)))
