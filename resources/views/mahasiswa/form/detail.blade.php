@@ -26,7 +26,7 @@
                         <img src="{{ asset( $aduan->bukti_foto) }}" alt="Foto Aduan"
                             class="w-48 h-32 object-cover rounded-lg shadow">
                     @else
-                        <img src="{{ asset('img/no-image.svg') }}" alt="No Image"
+                        <img src="{{ asset('storage/uploads/img/foto_fasilitas/Fasilitas Rusak.jpg') }}" alt="No Image"
                             class="w-48 h-32 object-cover rounded-lg shadow">
                     @endif
                     <div class="mt-3 text-center">

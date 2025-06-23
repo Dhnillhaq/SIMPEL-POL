@@ -26,7 +26,7 @@ class PengaduanSarprasController extends Controller
 
         $tanggalSekarang = Carbon::now()->day;
 
-        if($tanggalSekarang < 15) {
+        if ($tanggalSekarang < 15) {
             $breadcrumb = (object) [
                 'title' => '',
                 'list' => []
@@ -34,7 +34,7 @@ class PengaduanSarprasController extends Controller
 
             $pesan = 'Maaf, Anda tidak dapat mengakses menu ini setelah tanggal 15. Silakan tunggu hingga periode berikutnya pada tanggal <span class="font-semibold">1–15</span>.';
 
-            return view ('access.denied', [
+            return view('access.denied', [
                 'activeMenu' => $activeMenu,
                 'breadcrumb' => $breadcrumb,
                 'pesan' => $pesan,
@@ -55,12 +55,41 @@ class PengaduanSarprasController extends Controller
         $periodeSekarang = Periode::getPeriodeAktif();
 
         // Query untuk Pengaduan dari semua periode kecuali periode aktif
+        // $query = Fasilitas::with(['kategori', 'ruangan', 'aduan.pelapor.role', 'inspeksi'])
+        //     ->whereHas('aduan', function ($query) use ($periodeSekarang) {
+        //         $query->where('status', Status::MENUNGGU_DIPROSES->value)
+        //               ->where('id_periode', '!=', $periodeSekarang->id_periode);
+        //     });
+
+        // Step 1: Ambil 10 besar skor bobot (tanpa eager load dulu)
+        $topFasilitasIDs = Fasilitas::whereHas('aduan', function ($query) use ($periodeSekarang) {
+            $query->where('status', Status::MENUNGGU_DIPROSES->value)
+                ->where('id_periode', '!=', $periodeSekarang->id_periode);
+        })
+            ->withCount([
+                'aduan as skor_bobot' => function ($q) use ($periodeSekarang) {
+                    $q->where('status', Status::MENUNGGU_DIPROSES->value)
+                        ->where('id_periode', '!=', $periodeSekarang->id_periode)
+                        ->select(DB::raw('SUM(CASE
+                    WHEN users.id_role = 1 THEN 1
+                    WHEN users.id_role = 5 THEN 3
+                    WHEN users.id_role = 6 THEN 2
+                    ELSE 0
+              END)'))
+                ->join('users', 'aduan.id_user_pelapor', '=', 'users.id_user');
+                }
+            ])
+            ->orderByDesc('skor_bobot')
+            ->limit(10)
+            ->pluck('id_fasilitas'); // Hanya ID yang kita perlukan
+
+        // Step 2: Query sebenarnya untuk digunakan di view
         $query = Fasilitas::with(['kategori', 'ruangan', 'aduan.pelapor.role', 'inspeksi'])
+            ->whereIn('id_fasilitas', $topFasilitasIDs) // Limit 10 besar skor bobot
             ->whereHas('aduan', function ($query) use ($periodeSekarang) {
                 $query->where('status', Status::MENUNGGU_DIPROSES->value)
-                      ->where('id_periode', '!=', $periodeSekarang->id_periode);
+                    ->where('id_periode', '!=', $periodeSekarang->id_periode);
             });
-
         // Filter berdasarkan role pelapor
         if ($request->has('filter_user') && $request->filter_user != 'all') {
             $pelapor = match ($request->filter_user) {
@@ -89,16 +118,16 @@ class PengaduanSarprasController extends Controller
         $query->withCount([
             'aduan as skor_bobot' => function ($q) use ($periodeSekarang, $request) {
                 $q->where('status', Status::MENUNGGU_DIPROSES->value)
-                  ->where('id_periode', '!=', $periodeSekarang->id_periode)
-                  ->select(DB::raw('SUM(CASE
+                    ->where('id_periode', '!=', $periodeSekarang->id_periode)
+                    ->select(DB::raw('SUM(CASE
                         WHEN users.id_role = 1 THEN 1
                         WHEN users.id_role = 5 THEN 3
                         WHEN users.id_role = 6 THEN 2
                         ELSE 0
                     END)'))
-                  ->join('users', 'aduan.id_user_pelapor', '=', 'users.id_user');
+                    ->join('users', 'aduan.id_user_pelapor', '=', 'users.id_user');
 
-                  // Filter berdasarkan role jika filter_user ada
+                // Filter berdasarkan role jika filter_user ada
                 if ($request->has('filter_user') && $request->filter_user != 'all') {
                     $filterRole = $request->filter_user;
                     $q->whereHas('pelapor', function ($q2) use ($filterRole) {
@@ -108,20 +137,40 @@ class PengaduanSarprasController extends Controller
             }
         ]);
 
-        // Urutkan berdasarkan skor bobot secara menurun
-        $query->orderBy('skor_bobot', 'desc')->limit(10);
+        // Hitung skor berdasarkan user_count
+        $query->withCount([
+            'aduan as user_count' => function ($q) use ($periodeSekarang, $request) {
+                $q->where('status', Status::MENUNGGU_DIPROSES->value)
+                    ->where('id_periode', '!=', $periodeSekarang->id_periode)
+                    ->select(DB::raw('COUNT(DISTINCT aduan.id_user_pelapor)'));
 
+                // Filter berdasarkan role jika filter_user ada
+                if ($request->has('filter_user') && $request->filter_user != 'all') {
+                    $filterRole = $request->filter_user;
+                    $q->whereHas('pelapor', function ($q2) use ($filterRole) {
+                        $q2->where('id_role', $filterRole);
+                    });
+                }
+            }
+        ]);
+        
         $pengaduan = $query->get();
 
+        $isFilterPerRole = $request->filter_user != null && $request->filter_user != 'all';
         if ($request->ajax()) {
-            $html = view('sarpras.pengaduan.table', compact('pengaduan', 'pelapor'))->render();
+            $html = view('sarpras.pengaduan.table', compact('pengaduan', 'pelapor', 'isFilterPerRole'))->render();
             return response()->json(['html' => $html]);
         }
 
         $periode_sekarang = Periode::getPeriodeAktif();
         $periode_sebelumnya = Periode::where('tanggal_mulai', '<', $periode_sekarang->tanggal_mulai)->orderBy('tanggal_mulai', 'desc')->first()->kode_periode;
 
-        return view('sarpras.pengaduan.index', compact('breadcrumb', 'title', 'activeMenu', 'pengaduan', 'pelapor', 'periode_sebelumnya'));
+        return view('sarpras.pengaduan.index', compact('breadcrumb', 'title', 'activeMenu', 'pengaduan', 'pelapor', 'periode_sebelumnya', 'isFilterPerRole'));
+    }
+
+    public function info_bobot()
+    {
+        return view('sarpras.pengaduan.info');
     }
 
     // Detail Fasilitas & Laporan Pengaduan nya

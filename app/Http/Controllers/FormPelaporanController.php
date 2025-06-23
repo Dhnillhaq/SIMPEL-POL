@@ -124,31 +124,40 @@ class FormPelaporanController extends Controller
             //     return redirect()->back()->withErrors(['fasilitas' => 'Anda sudah membuat aduan untuk fasilitas ini.'])->withInput();
             // }
 
-            $is_selesai = $aduan->where('status', '!=', 'SELESAI')->count() > 0;
+            $is_selesai = $aduan->where('status', '!=', 'SELESAI')
+                ->where('id_periode', '==', Periode::getPeriodeAktif()->id_periode)
+                ->count() > 0;
 
             if ($aduan->count() > 0 && $is_selesai) {
                 return redirect()->back()->withErrors(['fasilitas' => 'Anda sudah membuat aduan untuk fasilitas ini.'])->withInput();
             }
 
-            // Proses upload gambar
-            if ($request->hasFile('bukti_foto')) {
-                $file = $request->file('bukti_foto');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('uploads/img/bukti_foto', $filename, 'public');
-                $bukti_foto = 'storage/' . $path;
-            }
+            try {
+                // $bukti_foto = null;
+                $aduan = Aduan::create([
+                    'id_user_pelapor' => auth()->user()->id_user,
+                    'id_fasilitas' => $request->fasilitas,
+                    'deskripsi' => $request->deskripsi,
+                    'tanggal_aduan' => now(),
+                    'id_periode' => Periode::where('tanggal_mulai', '<=', now())
+                        ->where('tanggal_selesai', '>=', now())
+                        ->value('id_periode'),
+                    'status' => $this->tentukanStatusFasilitas($request->fasilitas)->value,
+                ]);
+                // Proses upload gambar
+                if ($request->hasFile('bukti_foto')) {
+                    $file = $request->file('bukti_foto');
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $path = $file->storeAs('uploads/img/bukti_foto', $filename, 'public');
+                    $bukti_foto = 'storage/' . $path;
 
-            $aduan = Aduan::create([
-                'id_user_pelapor' => auth()->user()->id_user,
-                'id_fasilitas' => $request->fasilitas,
-                'deskripsi' => $request->deskripsi,
-                'bukti_foto' => $bukti_foto,
-                'tanggal_aduan' => now(),
-                'id_periode' => Periode::where('tanggal_mulai', '<=', now())
-                    ->where('tanggal_selesai', '>=', now())
-                    ->value('id_periode')-1,
-                'status' => $this->tentukanStatusFasilitas($request->fasilitas)->value,
-            ]);
+                    $aduan->update([
+                        'bukti_foto' => $bukti_foto
+                    ]);
+                }
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                return response()->json(['status' => false, 'message' => $e->getMessage()], 422);
+            }
 
             // return response()->json(['status' => true, 'message' => 'Aduan berhasil dibuat', 'data' => $aduan]);
             return redirect()->route('mahasiswa.form')->with('success', 'Aduan berhasil dibuat');
@@ -174,7 +183,13 @@ class FormPelaporanController extends Controller
                     ->withErrors($validation)
                     ->withInput();
             }
-            // Proses upload gambar
+
+            $aduan->update([
+                'id_fasilitas' => $request->fasilitas,
+                'deskripsi' => $request->deskripsi,
+            ]);
+
+            // Update bukti_foto
             if ($request->hasFile('bukti_foto')) {
                 if ($aduan->bukti_foto && file_exists(public_path($aduan->bukti_foto))) {
                     @unlink(public_path($aduan->bukti_foto));
@@ -183,13 +198,10 @@ class FormPelaporanController extends Controller
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('uploads/img/bukti_foto', $filename, 'public');
                 $bukti_foto = 'storage/' . $path;
+                $aduan->update([
+                    'bukti_foto' => $bukti_foto, // Ini harusnya kalo ga diisi gaush diupdate
+                ]);
             }
-
-            $aduan->update([
-                'id_fasilitas' => $request->fasilitas,
-                'deskripsi' => $request->deskripsi,
-                'bukti_foto' => $bukti_foto, // Ini harusnya kalo ga diisi gaush diupdate
-            ]);
 
             return redirect()->route('mahasiswa.form')->with('success', 'Aduan berhasil diperbarui');
         } catch (\Illuminate\Validation\ValidationException $e) {
