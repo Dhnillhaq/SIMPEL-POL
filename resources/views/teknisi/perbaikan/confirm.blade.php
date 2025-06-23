@@ -71,19 +71,19 @@
         @method('PUT')
 
         <!-- Status Pekerjaan -->
-        <div class="mb-6">
+        {{-- <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Status Pekerjaan</label>
             <select name="work_status" id="workStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
                 <option value="SEDANG_DIPERBAIKI" selected>Sedang Diperbaiki</option>
                 <option value="SELESAI">Selesai</option>
             </select>
-        </div>
+        </div> --}}
 
         <!-- Catatan Pekerjaan -->
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Pekerjaan</label>
-            <textarea name="work_notes" id="workNotes" rows="3" 
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" 
+            <textarea name="work_notes" id="workNotes" rows="3"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Masukkan detail pekerjaan yang telah dilakukan..."></textarea>
         </div>
 
@@ -101,9 +101,9 @@
                     class="font-semibold px-4 py-2 text-sm text-black bg-gray-300 hover:bg-gray-400 cursor-pointer">
                     Browse</label>
                 <input type="file" id="work_images" name="work_images[]" accept=".jpg,.jpeg,.png" multiple class="hidden"
-                    onchange="const input = document.getElementById('file-name-display'); 
-                            input.value = Array.from(this.files).map(file => file.name).join(', '); 
-                            input.classList.remove('text-gray-500'); 
+                    onchange="const input = document.getElementById('file-name-display');
+                            input.value = Array.from(this.files).map(file => file.name).join(', ');
+                            input.classList.remove('text-gray-500');
                             input.classList.add('text-black');">
             </div>
             <p class="mt-1 text-xs text-gray-500">
@@ -115,7 +115,7 @@
         <!-- Checklist Konfirmasi -->
         <div class="mb-6">
             <label class="flex items-center space-x-2">
-                <input type="checkbox" name="confirmation" id="confirmationCheckbox" required 
+                <input type="checkbox" name="confirmation" id="confirmationCheckbox" required
                     class="w-5 h-5 text-green-500 border-gray-300 rounded focus:ring-green-500">
                 <span class="text-sm text-gray-700">Saya menyatakan bahwa saya melakukan pekerjaan ini dengan sadar dan bertanggung jawab.</span>
             </label>

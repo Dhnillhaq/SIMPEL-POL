@@ -246,13 +246,13 @@
                                 alt="Form Pelaporan" class="mr-2 w-5">
                             Penugasan
                         </a>
-                        <a href="{{route('sarpras.perbaikan')}}"
+                        {{-- <a href="{{route('sarpras.perbaikan')}}"
                             class="flex items-center p-2 w-full {{ $activeMenu == 'perbaikan' ? 'bg-blue-800 text-white border-r-4' : 'hover:bg-gray-100' }} rounded-none"
                             style="{{ $activeMenu == 'perbaikan' ? 'border-color: #F99D1C;' : '' }}">
                             <img src="{{ $activeMenu == 'perbaikan' ? asset('icons/solid/Layers.svg') : asset('icons/light/Layers.svg') }}"
                                 alt="Form Pelaporan" class="mr-2 w-5">
                             Perbaikan
-                        </a>
+                        </a> --}}
                         <a href="{{ route('sarpras.riwayat') }}"
                             class="flex items-center p-2 w-full {{ $activeMenu == 'riwayat' ? 'bg-blue-800 text-white border-r-4' : 'hover:bg-gray-100' }} rounded-none"
                             style="{{ $activeMenu == 'riwayat' ? 'border-color: #F99D1C;' : '' }}">

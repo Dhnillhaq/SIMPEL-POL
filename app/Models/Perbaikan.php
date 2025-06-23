@@ -20,6 +20,10 @@ class Perbaikan extends Model
     {
         return $this->belongsTo(Periode::class, 'id_periode', 'id_periode');
     }
+    public function gambarPerbaikan()
+    {
+        return $this->hasMany(GambarPerbaikan::class, 'id_perbaikan', 'id_perbaikan');
+    }
     public function getFasilitasAttribute()
     {
         return $this->inspeksi?->fasilitas;
@@ -47,7 +51,7 @@ class Perbaikan extends Model
     public function getSarprasSelesaiAttribute()
     {
 
-    } 
+    }
 protected function buildAduanTertanganiQuery()
     {
         // Ambil id_fasilitas dari relasi inspeksi

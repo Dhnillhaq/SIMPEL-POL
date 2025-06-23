@@ -22,11 +22,13 @@
             <!-- Gambar -->
             <div class="flex-shrink-0">
                 <div class="bg-gray-100 rounded-lg shadow-sm p-4">
-                    <img src="{{ asset($perbaikan->inspeksi->fasilitas->foto_fasiltias ?? 'img/no-image.svg') }}" alt="Gambar Fasilitas"
-                        class="w-full h-32 object-cover rounded-lg border">
+                    <img src="{{ asset($perbaikan->inspeksi->fasilitas->foto_fasiltias ?? 'img/no-image.svg') }}"
+                        alt="Gambar Fasilitas" class="w-full h-32 object-cover rounded-lg border">
                     <div class="mt-2">
-                        <p class="font-semibold text-black-700">{{ $perbaikan->inspeksi->fasilitas->nama_fasilitas ?? '-' }}</p>
-                        <p class="text-gray-700">{{ ucwords($perbaikan->inspeksi->fasilitas->kategori->nama_kategori) ?? '-' }}</p>
+                        <p class="font-semibold text-black-700">
+                            {{ $perbaikan->inspeksi->fasilitas->nama_fasilitas ?? '-' }}</p>
+                        <p class="text-gray-700">
+                            {{ ucwords($perbaikan->inspeksi->fasilitas->kategori->nama_kategori) ?? '-' }}</p>
                     </div>
                 </div>
             </div>
@@ -54,14 +56,13 @@
                     <!-- Urgensi -->
                     <div>
                         <label class="block text-sm leading-relaxed text-gray-600 mb-1">Urgensi</label>
-                        <span class="inline-block px-4 py-1 rounded text-white text-sm font-medium
-                                @if($perbaikan->inspeksi->fasilitas->urgensi === \App\Http\Enums\Urgensi::DARURAT)
-                                    bg-red-500
+                        <span
+                            class="inline-block px-4 py-1 rounded text-white text-sm font-medium
+                                @if ($perbaikan->inspeksi->fasilitas->urgensi === \App\Http\Enums\Urgensi::DARURAT) bg-red-500
                                 @elseif($perbaikan->inspeksi->fasilitas->urgensi === \App\Http\Enums\Urgensi::PENTING)
                                     bg-yellow-500
                                 @else
-                                    bg-blue-500
-                                @endif">
+                                    bg-blue-500 @endif">
                             {{ $perbaikan->inspeksi->fasilitas->urgensi->value ?? '-' }}
                         </span>
                     </div>
@@ -78,7 +79,8 @@
                     <!-- Status -->
                     <div>
                         <label class="block text-sm leading-relaxed text-gray-500 mb-1">Status</label>
-                        <span class="inline-block px-4 py-1 rounded text-white text-sm font-medium w-32 block text-center bg-green-500">
+                        <span
+                            class="inline-block px-4 py-1 rounded text-white text-sm font-medium w-32 block text-center bg-green-500">
                             SELESAI
                         </span>
                     </div>
@@ -86,7 +88,8 @@
                     <!-- Jumlah Pelapor -->
                     <div>
                         <label class="block text-sm leading-relaxed text-gray-600 mb-1">Jumlah Pelapor</label>
-                        <p class="font-semibold text-sm leading-relaxed">{{ $perbaikan->jumlah_aduan_tertangani ?? '-' }}</p>
+                        <p class="font-semibold text-sm leading-relaxed">
+                            {{ $perbaikan->jumlah_aduan_tertangani ?? '-' }}</p>
                     </div>
                 </div>
             </div>
@@ -155,16 +158,15 @@
                 {{-- tingkat kerusakan --}}
                 <div class="text">
                     <label class=" text-sm font-medium text-gray-500 mb-1">Tingkat Kerusakan</label>
-                    <span class="inline-block px-4 py-1 rounded text-white text-sm font-medium
-                        @if($perbaikan->inspeksi->tingkat_kerusakan === \App\Http\Enums\TingkatKerusakan::PARAH)
-                            bg-red-500
+                    <span
+                        class="inline-block px-4 py-1 rounded text-white text-sm font-medium
+                        @if ($perbaikan->inspeksi->tingkat_kerusakan === \App\Http\Enums\TingkatKerusakan::PARAH) bg-red-500
                         @elseif($perbaikan->inspeksi->tingkat_kerusakan === \App\Http\Enums\TingkatKerusakan::SEDANG)
                             bg-yellow-500
                         @elseif($perbaikan->inspeksi->tingkat_kerusakan === \App\Http\Enums\TingkatKerusakan::RINGAN)
                             bg-blue-500
                         @else
-                            bg-gray-500
-                        @endif ">
+                            bg-gray-500 @endif ">
                         {{ $perbaikan->inspeksi->tingkat_kerusakan->value ?? '-' }}
                     </span>
                 </div>
@@ -189,10 +191,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if($perbaikan->inspeksi->biaya)
-                                @foreach($perbaikan->inspeksi->biaya as $i => $b)
+                            @if ($perbaikan->inspeksi->biaya)
+                                @foreach ($perbaikan->inspeksi->biaya as $i => $b)
                                     <tr class="hover:bg-gray-50">
-                                        <td class="border border-gray-300 px-3 py-2 text-center">{{ $i + 1 }}</td>
+                                        <td class="border border-gray-300 px-3 py-2 text-center">{{ $i + 1 }}
+                                        </td>
                                         <td class="border border-gray-300 px-3 py-2">{{ $b->keterangan }}</td>
                                         <td class="border border-gray-300 px-3 py-2 text-right">
                                             {{ number_format($b->besaran, 0, ',', '.') }}
@@ -201,7 +204,8 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="3" class="border border-gray-300 text-center text-gray-400">Tidak ada
+                                    <td colspan="3" class="border border-gray-300 text-center text-gray-400">Tidak
+                                        ada
                                         perencanaan biaya.</td>
                                 </tr>
                             @endif
@@ -218,7 +222,25 @@
                 </div>
             </div>
         </div>
-
+        <hr class="border-gray-300 my-6">
+        <div class="mb-6">
+            <div class="flex items-center mb-4">
+                <div class="bg-blue-500 text-white p-2 rounded-md mr-3">
+                    <i class="fas fa-images"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800">Bukti Perbaikan</h3>
+            </div>
+            <div class="flex space-x-4 mb-4 gap-3">
+                @foreach ($perbaikan->gambarPerbaikan as $gambar)
+                    <div class="w-32 h-32 bg-gray-100 rounded-lg shadow-sm overflow-hidden">
+                        <a href="{{ asset($gambar->path_gambar) }}" target="_blank">
+                            <img src="{{ asset($gambar->path_gambar) }}" alt="Gambar Perbaikan"
+                                class="w-full h-full object-cover hover:opacity-80 transition duration-200">
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
         <hr class="border-gray-300 my-6">
 
         <!-- Umpan Balik -->
@@ -234,10 +256,11 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-2">Umpan Balik</label>
                     {{-- Rata-rata rating seluruh pelapor --}}
-                    @if($perbaikan->rata_rata_rating)
+                    @if ($perbaikan->rata_rata_rating)
                         <div class="flex items-center mb-2">
                             <i class="fas fa-star text-yellow-400 text-lg mr-1"></i>
-                            <span class="text-yellow-500 font-bold text-lg mr-1">{{ number_format($perbaikan->rata_rata_rating, 1) }}</span>
+                            <span
+                                class="text-yellow-500 font-bold text-lg mr-1">{{ number_format($perbaikan->rata_rata_rating, 1) }}</span>
                             <span class="text-gray-600 text-sm"> / 5.0</span>
                         </div>
                     @else
@@ -250,7 +273,7 @@
 
 
     <script>
-        $(document).on('click', '#modal-close', function () {
+        $(document).on('click', '#modal-close', function() {
             $('#myModal').addClass('hidden').removeClass('flex').html('');
         });
     </script>

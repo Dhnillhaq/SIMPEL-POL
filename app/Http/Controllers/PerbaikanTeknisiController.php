@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Enums\Status;
+use App\Models\Aduan;
 use App\Models\Fasilitas;
 use App\Models\Notifikasi;
 use App\Models\Perbaikan;
@@ -106,7 +107,7 @@ class PerbaikanTeknisiController extends Controller
     }
     public function confirm($id)
     {
-       try {
+        try {
             $perbaikan = Perbaikan::with(['inspeksi', 'inspeksi.fasilitas', 'inspeksi.fasilitas.aduan', 'inspeksi.periode'])->findOrFail($id);
             $inspeksi = $perbaikan->inspeksi;
             $fasilitas = $inspeksi->fasilitas;
@@ -121,75 +122,83 @@ class PerbaikanTeknisiController extends Controller
             return redirect()->back()->withErrors(['general' => 'Gagal menampilkan halaman konfirmasi.']);
         }
     }
-    public function submit(Request $request)
-{
-    dd($request->all());
-    try {
-        // Validasi input
-        $request->validate([
-            'work_notes' => 'nullable|string',
-            'work_images' => 'nullable|array',
-            'work_images.*' => 'image|max:2048', // Validasi gambar
-            'work_status' => 'required|in:SEDANG_DIPERBAIKI,SELESAI',
-        ]);
+    public function submit(Request $request, $id_perbaikan)
+    {
+        // dd($request->all());
+        try {
+            // Validasi input
+            $request->validate([
+                'work_notes' => 'nullable|string',
+                'work_images' => 'nullable|array',
+            ]);
 
-        // Temukan perbaikan berdasarkan ID
-        $perbaikan = Perbaikan::with(['inspeksi', 'inspeksi.fasilitas'])->findOrFail($request->id_perbaikan);
+            // Temukan perbaikan berdasarkan ID
+            $perbaikan = Perbaikan::with(['inspeksi', 'inspeksi.fasilitas'])->findOrFail($id_perbaikan);
 
-        // Simpan work_notes ke detail_perbaikan
-        $perbaikan->detail_perbaikan = $request->work_notes;
+            // Simpan work_notes ke detail_perbaikan
+            $perbaikan->detail_perbaikan = $request->work_notes;
 
-        // Upload gambar dan simpan URL ke gambar_perbaikan
-        $uploadedImages = [];
-        if ($request->hasFile('work_images')) {
-            foreach ($request->file('work_images') as $image) {
-                $path = $image->store(
-                    'perbaikan/fasilitas/' . $perbaikan->inspeksi->periode->id_periode,
-                    'public'
-                );
-                $uploadedImages[] = $path;
+            // Upload gambar dan simpan URL ke gambar_perbaikan
+            $uploadedImages = [];
+            if ($request->hasFile('work_images')) {
+                foreach ($request->file('work_images') as $image) {
+                    $save = $image->storeAs('uploads/img/bukti_foto', uniqid() . '.' . $image->getClientOriginalExtension(), 'public');
+                    $path = 'storage/'.$save; // Simpan path gambar
+                    $uploadedImages[] = $path;
+                }
             }
-        }
-        $perbaikan->gambar_perbaikan = implode(',', $uploadedImages); // Simpan URL gambar sebagai string yang dipisahkan koma
+            // $perbaikan->gambar_perbaikan = implode(',', $uploadedImages); // Simpan URL gambar sebagai string yang dipisahkan koma
 
-        // Update status aduan jika work_status adalah SELESAI
-        if ($request->work_status === 'SELESAI') {
-            $aduan = $perbaikan->inspeksi->fasilitas->aduan()
-                ->where('id_inspeksi', $perbaikan->inspeksi->id_inspeksi)
-                ->first();
-
-            if ($aduan) {
-                $aduan->status = Status::SELESAI->value;
-                $aduan->save();
+            foreach ($uploadedImages as $imagePath) {
+                $perbaikan->gambarPerbaikan()->create([
+                    'path_gambar' => $imagePath,
+                ]);
             }
 
-            // Tetapkan tanggal_selesai menjadi now()
             $perbaikan->tanggal_selesai = now();
+
+            $aduan = Aduan::where('id_fasilitas', $perbaikan->inspeksi->fasilitas->id_fasilitas)->where('status', Status::SEDANG_DIPERBAIKI->value)->get();
+            $fasilitas = Fasilitas::where('id_fasilitas', $perbaikan->inspeksi->fasilitas->id_fasilitas)->value('nama_fasilitas');
+            foreach ($aduan as $a) {
+                $a->update(['status' => Status::SELESAI->value]);
+
+                // Notifikasi ke pelapor (versi panjang)
+                Notifikasi::create([
+                    'pesan' => 'Fasilitas <b class="text-red-500">' . $fasilitas . '</b> yang Anda laporkan telah selesai diperbaiki. Terima kasih atas partisipasinya.',
+                    'waktu_kirim' => now(),
+                    'id_user' => $a->pelapor->id_user,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            // Simpan perubahan pada perbaikan
+            $perbaikan->save();
+
+            return redirect()->back()->with('success', 'Data perbaikan berhasil diperbarui.');
+        } catch (\Throwable $th) {
+            Log::error('Gagal memperbarui data perbaikan: ' . $th->getMessage());
+            // return redirect()->back()->withErrors(['general' => 'Gagal memperbarui data perbaikan.']);
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
         }
-
-        // Simpan perubahan pada perbaikan
-        $perbaikan->save();
-
-        return redirect()->back()->with('success', 'Data perbaikan berhasil diperbarui.');
-    } catch (\Throwable $th) {
-        Log::error('Gagal memperbarui data perbaikan: ' . $th->getMessage());
-        return redirect()->back()->withErrors(['general' => 'Gagal memperbarui data perbaikan.']);
     }
-}
     public function cycle($id)
     {
         try {
             // Kode Eril
             $perbaikan = Perbaikan::findOrFail($id);
-            
+
             // Bukan Kode Eril
             $inspeksi = $perbaikan->inspeksi;
             $fasilitas = Fasilitas::where('id_fasilitas', $inspeksi->id_fasilitas)->value('nama_fasilitas');
-            
+
             // Kode Eril
             if ($perbaikan->teknisi_selesai) {
                 $perbaikan->tanggal_selesai = null;
-                
+
                 // Bukan Kode Eril
                 // Notifikasi ke sarpras
                 Notifikasi::create([
@@ -201,10 +210,10 @@ class PerbaikanTeknisiController extends Controller
                 ]);
                 $pesan = 'Berhasil membatalkan menandai perbaikan sebagai selesai.';
 
-            // Kode Eril
+                // Kode Eril
             } else {
                 $perbaikan->tanggal_selesai = now();
-                
+
                 // Bukan Kode Eril
                 // Notifikasi ke sarpras
                 Notifikasi::create([
@@ -218,8 +227,8 @@ class PerbaikanTeknisiController extends Controller
             }
             $perbaikan->update();
 
-            
-            
+
+
             return redirect()->back()->with('success', $pesan);
         } catch (\Exception $e) {
             Log::error('Gagal menyelesaikan tugas perbaikan. : ' . $e->getMessage());
