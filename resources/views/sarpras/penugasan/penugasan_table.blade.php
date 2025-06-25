@@ -19,23 +19,23 @@
                 <x-table.cell>{{ $item['fasilitas']['ruangan']['lantai']['gedung']['nama_gedung'] . ', ' . $item['fasilitas']['ruangan']['lantai']['nama_lantai'] . ', ' . $item['fasilitas']['ruangan']['nama_ruangan'] ?? '-' }}</x-table.cell>
                 <x-table.cell>
                     <div class="flex flex-col items-center">
-                    @if(isset($item['fasilitas']['urgensi']))
-                        <span class="w-[90px] text-center py-1 px-2 rounded-full text-white text-sm
-                                    @if($item['fasilitas']['urgensi'] === \App\Http\Enums\Urgensi::DARURAT->value)
-                                        px-3 bg-red-600
-                                    @elseif($item['fasilitas']['urgensi'] === \App\Http\Enums\Urgensi::PENTING->value)
-                                        px-3 bg-yellow-500
-                                    @elseif($item['fasilitas']['urgensi'] === \App\Http\Enums\Urgensi::BIASA->value)
-                                        px-6 bg-blue-600
-                                    @else
-                                        px-3 bg-gray-600
-                                    @endif
-                                ">
-                            {{ $item['fasilitas']['urgensi'] ?? '-' }}
-                        </span>
-                    @else
-                        <span class="px-3 py-1 rounded-full bg-gray-500 text-white text-sm">-</span>
-                    @endif
+                        @if(isset($item['fasilitas']['urgensi']))
+                            <span class="w-[90px] text-center py-1 px-2 rounded-full text-white text-sm
+                                            @if($item['fasilitas']['urgensi'] === \App\Http\Enums\Urgensi::DARURAT->value)
+                                                px-3 bg-red-600
+                                            @elseif($item['fasilitas']['urgensi'] === \App\Http\Enums\Urgensi::PENTING->value)
+                                                px-3 bg-yellow-500
+                                            @elseif($item['fasilitas']['urgensi'] === \App\Http\Enums\Urgensi::BIASA->value)
+                                                px-6 bg-blue-600
+                                            @else
+                                                px-3 bg-gray-600
+                                            @endif
+                                        ">
+                                {{ $item['fasilitas']['urgensi'] ?? '-' }}
+                            </span>
+                        @else
+                            <span class="px-3 py-1 rounded-full bg-gray-500 text-white text-sm">-</span>
+                        @endif
                     </div>
                 </x-table.cell>
                 <x-table.cell>
@@ -45,32 +45,42 @@
                 </x-table.cell>
                 <x-table.cell>
                     <div class="flex flex-col items-center">
-                    @if(isset($item['tingkat_kerusakan_asli']))
-                        <span class="w-[90px] text-center py-1 px-2 rounded-full text-white text-sm
-                                    @if($item['tingkat_kerusakan_asli'] === \App\Http\Enums\TingkatKerusakan::PARAH->value)
-                                        px-3 bg-red-600
-                                    @elseif($item['tingkat_kerusakan_asli'] === \App\Http\Enums\TingkatKerusakan::SEDANG->value)
-                                        px-3 bg-yellow-500
-                                    @elseif($item['tingkat_kerusakan_asli'] === \App\Http\Enums\TingkatKerusakan::RINGAN->value)
-                                        px-3 bg-blue-600
-                                    @else
-                                        px-3 bg-gray-600
-                                    @endif
-                                ">
-                            {{ $item['tingkat_kerusakan_asli'] ?? '-' }}
-                        </span>
-                    @else
-                        <span class="px-3 py-1 rounded-full bg-gray-500 text-white text-sm">-</span>
-                    @endif
+                        @if(isset($item['tingkat_kerusakan_asli']))
+                            <span class="w-[90px] text-center py-1 px-2 rounded-full text-white text-sm
+                                            @if($item['tingkat_kerusakan_asli'] === \App\Http\Enums\TingkatKerusakan::PARAH->value)
+                                                px-3 bg-red-600
+                                            @elseif($item['tingkat_kerusakan_asli'] === \App\Http\Enums\TingkatKerusakan::SEDANG->value)
+                                                px-3 bg-yellow-500
+                                            @elseif($item['tingkat_kerusakan_asli'] === \App\Http\Enums\TingkatKerusakan::RINGAN->value)
+                                                px-3 bg-blue-600
+                                            @else
+                                                px-3 bg-gray-600
+                                            @endif
+                                        ">
+                                {{ $item['tingkat_kerusakan_asli'] ?? '-' }}
+                            </span>
+                        @else
+                            <span class="px-3 py-1 rounded-full bg-gray-500 text-white text-sm">-</span>
+                        @endif
                     </div>
                 </x-table.cell>
                 <x-table.cell>
+                    @php
+                        $perhitungan = [
+                            'leaving_flow' => $item['leaving_flow'],
+                            'entering_flow' => $item['entering_flow'],
+                            'net_flow' => $item['skor']
+                        ]
+                    @endphp
                     <div class="flex items-center space-x-2 min-w-[90px]">
-                        <button onclick="modalAction('{{ route('sarpras.penugasan.show', $item['id_inspeksi']) }}')"
+                        <button
+                            onclick="modalAction('{{ route('sarpras.penugasan.show', ['inspeksi' => $item['id_inspeksi'], 'perhitungan' => json_encode($perhitungan)]) }}')"
                             class="text-blue-600 hover:underline text-sm cursor-pointer">
-                            <img src="{{ asset('icons/solid/Detail.svg') }}" alt="" class="h-7 w-7 min-h-[25px] min-w-[25px]">
+                            <img src="{{ asset('icons/solid/Detail.svg') }}" alt=""
+                                class="h-7 w-7 min-h-[25px] min-w-[25px]">
                         </button>
-                        <button onclick="modalAction('{{ route('sarpras.penugasan.confirm', $item['id_inspeksi']) }}')" class="text-yellow-600 hover:underline text-sm cursor-pointer">
+                        <button onclick="modalAction('{{ route('sarpras.penugasan.confirm', $item['id_inspeksi']) }}')"
+                            class="text-yellow-600 hover:underline text-sm cursor-pointer">
                             <img src="{{ asset('icons/solid/Acc.svg') }}" alt="" class="h-7 w-7 min-h-[25px] min-w-[25px]">
                         </button>
                     </div>

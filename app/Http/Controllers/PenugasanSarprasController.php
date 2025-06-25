@@ -134,10 +134,14 @@ class PenugasanSarprasController extends Controller
     }
 
     // Detail Fasilitas & Laporan Pengaduan nya
-    public function show_penugasan(Inspeksi $inspeksi)
+    public function show_penugasan(Inspeksi $inspeksi, Request $request)
     {
+        $perhitungan = $request->query('perhitungan');
+
+        $perhitungan = $perhitungan ? json_decode($perhitungan, true) : [];
+
         $biaya = Biaya::where('id_inspeksi', $inspeksi->id_inspeksi)->get();
-        return view('sarpras.penugasan.detail', ['inspeksi' => $inspeksi, 'biaya' => $biaya]);
+        return view('sarpras.penugasan.detail', ['inspeksi' => $inspeksi, 'biaya' => $biaya, 'perhitungan' => $perhitungan]);
     }
 
     // Method menugaskan teknisi untuk inspeksi
