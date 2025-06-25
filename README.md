@@ -73,14 +73,6 @@ Alur proses pelaporan:
 4. **Perbaikan** oleh teknisi
 5. **Umpan balik** dari pelapor
 
-## 💻 Teknologi yang Digunakan
-
-- **Frontend**: React.js, Redux, Material UI
-- **Backend**: Node.js, Express, MongoDB
-- **Mobile**: React Native
-- **Authentication**: JWT, OAuth2
-- **Cloud**: AWS/GCP
-- **CI/CD**: GitHub Actions
 
 ## 📊 Peta Jalan Pengembangan
 
@@ -94,7 +86,7 @@ Alur proses pelaporan:
 
 ## 🤝 Kontribusi
 
-SIMPEL-POL adalah proyek open-source yang dikembangkan oleh Tim TI Politeknik Negeri Malang. Kami menyambut kontribusi dari seluruh civitas akademika untuk penyempurnaan sistem.
+SIMPEL-POL adalah proyek open-source yang dikembangkan oleh KELOMPOK 3 TI-2H Politeknik Negeri Malang. Kami menyambut kontribusi dari seluruh civitas akademika untuk penyempurnaan sistem.
 
 
 ## 📄 Lisensi
@@ -113,7 +105,7 @@ Untuk pertanyaan dan dukungan, silakan hubungi:
 
 <div align="center">
   
-  **Dikembangkan dengan ❤️ oleh Tim TI Politeknik Negeri Malang**
+  **Dikembangkan dengan ❤️ oleh KELOMPOK 3 TI-2H**
   
   [Website](https://www.polinema.ac.id) • [GitHub](https://github.com/polinema) • [Instagram](https://www.instagram.com/polinema_campus)
   
