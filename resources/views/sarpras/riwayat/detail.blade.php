@@ -223,6 +223,7 @@
             </div>
         </div>
         <hr class="border-gray-300 my-6">
+        {{-- Gambar Perbaikan --}}
         <div class="mb-6">
             <div class="flex items-center mb-4">
                 <div class="bg-blue-500 text-white p-2 rounded-md mr-3">
