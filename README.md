@@ -74,16 +74,6 @@ Alur proses pelaporan:
 5. **Umpan balik** dari pelapor
 
 
-## 📊 Peta Jalan Pengembangan
-
-| Fase | Target | Status |
-|------|--------|--------|
-| 1.0 | Sistem dasar pelaporan | ✅ Selesai |
-| 1.5 | Integrasi notifikasi | ✅ Selesai |
-| 2.0 | Aplikasi mobile | 🚧 Dalam Pengerjaan |
-| 2.5 | Dashboard analitik | 📅 Q3 2025 |
-| 3.0 | Sistem prediktif | 📅 Q4 2025 |
-
 ## 🤝 Kontribusi
 
 SIMPEL-POL adalah proyek open-source yang dikembangkan oleh KELOMPOK 3 TI-2H Politeknik Negeri Malang. Kami menyambut kontribusi dari seluruh civitas akademika untuk penyempurnaan sistem.
