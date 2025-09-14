@@ -30,7 +30,7 @@ class AuthorizeUser
             abort(403, 'Forbidden. Kamu tidak punya akses ke halaman ini');
         } catch (\Throwable $th) {
             // abort(403, 'Forbidden. Kamu tidak punya akses ke halaman ini. Silakan masuk terlebih dahulu.');
-            return redirect()->route('login');
+            return redirect()->route('page_not_found');
         }
     }
 }
