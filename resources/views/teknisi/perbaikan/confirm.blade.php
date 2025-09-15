@@ -90,7 +90,7 @@
         <!-- Upload Gambar -->
         <div class="mb-6">
             <label for="work_images" class="block text-sm font-medium mb-1">
-                Upload Gambar
+                Upload Gambar <span class="text-red-500">*</span>
             </label>
 
             <div class="flex items-center border border-gray-300 rounded-md bg-white overflow-hidden">
@@ -104,7 +104,7 @@
                     onchange="const input = document.getElementById('file-name-display');
                             input.value = Array.from(this.files).map(file => file.name).join(', ');
                             input.classList.remove('text-gray-500');
-                            input.classList.add('text-black');">
+                            input.classList.add('text-black');" required>
             </div>
             <p class="mt-1 text-xs text-gray-500">
                 Format yang didukung: JPG, PNG, JPEG. Ukuran maksimal: 2MB
