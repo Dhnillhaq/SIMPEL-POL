@@ -26,7 +26,7 @@ class PengaduanSarprasController extends Controller
 
         $tanggalSekarang = Carbon::now()->day;
 
-        if ($tanggalSekarang < 15) {
+        if ($tanggalSekarang > 15) {
             $breadcrumb = (object) [
                 'title' => '',
                 'list' => []
@@ -53,6 +53,7 @@ class PengaduanSarprasController extends Controller
 
         // Ambil periode aktif saat ini
         $periodeSekarang = Periode::getPeriodeAktif();
+        // dd($periodeSekarang);
 
         // Query untuk Pengaduan dari semua periode kecuali periode aktif
         // $query = Fasilitas::with(['kategori', 'ruangan', 'aduan.pelapor.role', 'inspeksi'])

@@ -26,9 +26,11 @@
                         alt="Gambar Fasilitas" class="w-full h-32 object-cover rounded-lg border">
                     <div class="mt-2">
                         <p class="font-semibold text-black-700">
-                            {{ $perbaikan->inspeksi->fasilitas->nama_fasilitas ?? '-' }}</p>
+                            {{ $perbaikan->inspeksi->fasilitas->nama_fasilitas ?? '-' }}
+                        </p>
                         <p class="text-gray-700">
-                            {{ ucwords($perbaikan->inspeksi->fasilitas->kategori->nama_kategori) ?? '-' }}</p>
+                            {{ ucwords($perbaikan->inspeksi->fasilitas->kategori->nama_kategori) ?? '-' }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -56,13 +58,12 @@
                     <!-- Urgensi -->
                     <div>
                         <label class="block text-sm leading-relaxed text-gray-600 mb-1">Urgensi</label>
-                        <span
-                            class="inline-block px-4 py-1 rounded text-white text-sm font-medium
+                        <span class="inline-block px-4 py-1 rounded text-white text-sm font-medium
                                 @if ($perbaikan->inspeksi->fasilitas->urgensi === \App\Http\Enums\Urgensi::DARURAT) bg-red-500
                                 @elseif($perbaikan->inspeksi->fasilitas->urgensi === \App\Http\Enums\Urgensi::PENTING)
                                     bg-yellow-500
                                 @else
-                                    bg-blue-500 @endif">
+                                bg-blue-500 @endif">
                             {{ $perbaikan->inspeksi->fasilitas->urgensi->value ?? '-' }}
                         </span>
                     </div>
@@ -89,7 +90,8 @@
                     <div>
                         <label class="block text-sm leading-relaxed text-gray-600 mb-1">Jumlah Pelapor</label>
                         <p class="font-semibold text-sm leading-relaxed">
-                            {{ $perbaikan->jumlah_aduan_tertangani ?? '-' }}</p>
+                            {{ $perbaikan->jumlah_aduan_tertangani ?? '-' }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -111,7 +113,8 @@
                 <div>
                     <label class="block text-gray-600 font-medium mb-1">Nama</label>
                     <p class="text-gray-800 font-semibold">
-                        {{ $perbaikan->inspeksi->teknisi->nama ?? '-' }}</p>
+                        {{ $perbaikan->inspeksi->teknisi->nama ?? '-' }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-gray-600 font-medium mb-1">Jurusan</label>
@@ -122,22 +125,26 @@
                 <div>
                     <label class="block text-gray-600 font-medium mb-1">NIP</label>
                     <p class="text-gray-800 font-semibold">
-                        {{ $perbaikan->inspeksi->teknisi->pegawai->nip ?? '-' }}</p>
+                        {{ $perbaikan->inspeksi->teknisi->pegawai->nip ?? '-' }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-gray-600 font-medium mb-1">Username</label>
                     <p class="text-gray-800 font-semibold">
-                        {{ $perbaikan->inspeksi->teknisi->username ?? '-' }}</p>
+                        {{ $perbaikan->inspeksi->teknisi->username ?? '-' }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-gray-600 font-medium mb-1">Email</label>
                     <p class="text-gray-800 font-semibold">
-                        {{ $perbaikan->inspeksi->teknisi->email ?? '-' }}</p>
+                        {{ $perbaikan->inspeksi->teknisi->email ?? '-' }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-gray-600 font-medium mb-1">No. Telepon</label>
                     <p class="text-gray-800 font-semibold">
-                        {{ $perbaikan->inspeksi->teknisi->no_hp ?? '-' }}</p>
+                        {{ $perbaikan->inspeksi->teknisi->no_hp ?? '-' }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -158,15 +165,14 @@
                 {{-- tingkat kerusakan --}}
                 <div class="text">
                     <label class=" text-sm font-medium text-gray-500 mb-1">Tingkat Kerusakan</label>
-                    <span
-                        class="inline-block px-4 py-1 rounded text-white text-sm font-medium
+                    <span class="inline-block px-4 py-1 rounded text-white text-sm font-medium
                         @if ($perbaikan->inspeksi->tingkat_kerusakan === \App\Http\Enums\TingkatKerusakan::PARAH) bg-red-500
                         @elseif($perbaikan->inspeksi->tingkat_kerusakan === \App\Http\Enums\TingkatKerusakan::SEDANG)
                             bg-yellow-500
                         @elseif($perbaikan->inspeksi->tingkat_kerusakan === \App\Http\Enums\TingkatKerusakan::RINGAN)
                             bg-blue-500
                         @else
-                            bg-gray-500 @endif ">
+                        bg-gray-500 @endif ">
                         {{ $perbaikan->inspeksi->tingkat_kerusakan->value ?? '-' }}
                     </span>
                 </div>
@@ -241,6 +247,9 @@
                     </div>
                 @endforeach
             </div>
+            <div class="flex space-x-4 mb-4 gap-3">
+                <p class="block text-sm text-gray-600 font-normal mb-1">{{$perbaikan->detail_perbaikan}}</p>
+            </div>
         </div>
         <hr class="border-gray-300 my-6">
 
@@ -274,7 +283,7 @@
 
 
     <script>
-        $(document).on('click', '#modal-close', function() {
+        $(document).on('click', '#modal-close', function () {
             $('#myModal').addClass('hidden').removeClass('flex').html('');
         });
     </script>

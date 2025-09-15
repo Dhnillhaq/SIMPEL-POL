@@ -53,5 +53,55 @@ class PeriodeSeeder extends Seeder
                 'tanggal_selesai' => '2025-07-31'
             ]
         );
+        Periode::updateOrCreate(
+            [
+                'id_periode' => 5
+            ],
+            [
+                'kode_periode' => '2025-VIII',
+                'tanggal_mulai' => '2025-08-01',
+                'tanggal_selesai' => '2025-08-31'
+            ]
+        );
+        Periode::updateOrCreate(
+            [
+                'id_periode' => 6
+            ],
+            [
+                'kode_periode' => '2025-IX',
+                'tanggal_mulai' => '2025-09-01',
+                'tanggal_selesai' => '2025-09-30'
+            ]
+        );
+        Periode::updateOrCreate(
+            [
+                'id_periode' => 7
+            ],
+            [
+                'kode_periode' => '2025-X',
+                'tanggal_mulai' => '2025-10-01',
+                'tanggal_selesai' => '2025-10-31'
+            ]
+        );
+        Periode::updateOrCreate(
+            [
+                'id_periode' => 8
+            ],
+            [
+                'kode_periode' => '2025-XI',
+                'tanggal_mulai' => '2025-11-01',
+                'tanggal_selesai' => '2025-11-30'
+            ]
+        );
+        Periode::updateOrCreate(
+            [
+                'id_periode' => 9
+            ],
+            [
+                'kode_periode' => '2025-XII',
+                'tanggal_mulai' => '2025-12-01',
+                'tanggal_selesai' => '2025-12-31'
+            ]
+        );
     }
 }
