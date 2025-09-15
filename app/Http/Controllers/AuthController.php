@@ -35,51 +35,53 @@ class AuthController extends Controller
     }
 
 
-public function postMasuk(Request $request)
-{
-    $request->validate([
-        'username' => 'required|string|max:255',
-        'password' => 'required|string|max:255',
-    ]);
+    public function postMasuk(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|max:255',
+        ]);
 
-    if ($request->ajax() || $request->wantsJson()) {
-        $credentials = $request->only('username', 'password');
+        if ($request->ajax() || $request->wantsJson()) {
+            $credentials = $request->only('username', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user(); // pastikan relasi dimuat
-            $role = strtoupper($user->role->nama_role ?? '');
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user(); // pastikan relasi dimuat
+                $role = strtoupper($user->role->nama_role ?? '');
 
-            $redirectUrl = url('/');
-            if ($role == 'ADMIN') {
-                $redirectUrl = url('/admin');
-            }  elseif($role == 'SARPRAS'){
-                $redirectUrl = url('/sarpras');
-            }  elseif($role == 'TEKNISI'){
-                $redirectUrl = url('/teknisi');
-            } elseif (in_array($role, ['MAHASISWA', 'DOSEN', 'TENDIK'])) {
-                $redirectUrl = url('/pelapor');
-            }elseif ($role == 'TEKNISI') {
-                $redirectUrl = url('/teknisi');
-            }elseif ($role == 'SARPRAS') {
-                $redirectUrl = url('/sarpras');
+                $redirectUrl = url('/');
+                if ($role == 'ADMIN') {
+                    $redirectUrl = url('/admin');
+                } elseif ($role == 'SARPRAS') {
+                    $redirectUrl = url('/sarpras');
+                } elseif ($role == 'TEKNISI') {
+                    $redirectUrl = url('/teknisi');
+                } elseif (in_array($role, ['MAHASISWA', 'DOSEN', 'TENDIK'])) {
+                    $redirectUrl = url('/pelapor');
+                } elseif ($role == 'TEKNISI') {
+                    $redirectUrl = url('/teknisi');
+                } elseif ($role == 'SARPRAS') {
+                    $redirectUrl = url('/sarpras');
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Login Berhasil',
+                    'redirect' => $redirectUrl
+                ]);
             }
 
             return response()->json([
-                'status' => true,
-                'message' => 'Login Berhasil',
-                'redirect' => $redirectUrl
+                'status' => false,
+                'message' => 'Username atau password salah'
             ]);
         }
 
-        return response()->json([
-            'status' => false,
-            'message' => 'Username atau password salah'
-        ]);
+        return redirect('login');
     }
+    public function page_not_found()
+    {
 
-    return redirect('login');
-}
-
-
-
+        return view('errors.404');
+    }
 }

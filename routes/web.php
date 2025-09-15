@@ -40,6 +40,7 @@ Route::get('/', [WelcomeController::class, 'index']);
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'postMasuk']);
 Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/404', [AuthController::class, 'page_not_found'])->name('page_not_found');
 
 // Profil
 Route::prefix('profil')->middleware(['auth'])->group(function () {
