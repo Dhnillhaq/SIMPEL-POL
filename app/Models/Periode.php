@@ -19,10 +19,10 @@ class Periode extends Model
         'tanggal_selesai'
     ];
 
-
     public static function getPeriodeAktif()
     {
-        $tanggalSekarang = Carbon::now();
+        $tanggalSekarang = Carbon::now()->format('Y-m-d');
+        // dd($tanggalSekarang);
         return self::where('tanggal_mulai', '<=', $tanggalSekarang)
                    ->where('tanggal_selesai', '>=', $tanggalSekarang)
                    ->first();
